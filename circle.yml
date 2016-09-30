@@ -1,0 +1,25 @@
+machine:
+  services:
+    - docker
+
+  environment:
+    CONFLUENCE_VERSION: '5.10.6'
+
+dependencies:
+  override:
+    - docker info
+    - docker build --rm=false --build-arg CONFLUENCE_VERSION=$CONFLUENCE_VERSION -t sanderkleykens/confluence:$CONFLUENCE_VERSION .
+
+test:
+  override:
+    - docker run -d -p 8090:8090 --name confluence sanderkleykens/confluence:$CONFLUENCE_VERSION
+    - sleep 30
+    - curl --retry 10 --retry-delay 5 -v http://localhost:8090
+    - docker stop confluence
+
+deployment:
+  hub:
+    branch: master
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker push sanderkleykens/confluence:$CONFLUENCE_VERSION
