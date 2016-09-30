@@ -7,7 +7,7 @@ then
         --type attr \
         -n proxyName \
         --value "${CONFLUENCE_PROXY_NAME}" \
-        ${CONFLUENCE_INSTALL_DIR}/conf/server.xml
+        "${CONFLUENCE_INSTALL_DIR}/conf/server.xml"
 fi
 
 if [ -n "${CONFLUENCE_PROXY_PORT}" ]
@@ -17,7 +17,7 @@ then
         --type attr \
         -n proxyPort \
         --value "${CONFLUENCE_PROXY_PORT}" \
-        ${CONFLUENCE_INSTALL_DIR}/conf/server.xml
+        "${CONFLUENCE_INSTALL_DIR}/conf/server.xml"
 fi
 
 if [ -n "${CONFLUENCE_PROXY_SCHEME}" ]
@@ -27,7 +27,15 @@ then
         --type attr \
         -n scheme \
         --value "${CONFLUENCE_PROXY_SCHEME}" \
-        ${CONFLUENCE_INSTALL_DIR}/conf/server.xml
+        "${CONFLUENCE_INSTALL_DIR}/conf/server.xml"
+fi
+
+if [ -n "${CONFLUENCE_CONTEXT_PATH}" ]
+then
+    xmlstarlet ed -P -S -L \
+        --update '//Context/@path' \
+        --value "${CONFLUENCE_CONTEXT_PATH}" \
+        "${CONFLUENCE_INSTALL_DIR}/conf/server.xml"
 fi
 
 groupadd -r confluence -g ${GROUP_ID}
