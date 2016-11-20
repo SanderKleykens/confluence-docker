@@ -3,7 +3,7 @@ machine:
     - docker
 
   environment:
-    CONFLUENCE_VERSION: '5.10.6'
+    CONFLUENCE_VERSION: '6.0.1'
 
 dependencies:
   override:
